@@ -56,8 +56,7 @@ namespace gestionbiblioteca
                         sb.Append(@"<script>");
                         sb.Append("$('#editModal').modal('show')");
                         sb.Append(@"</script>");
-
-
+                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ConfirmarEdicion", sb.ToString(), false);
                     }
                     break;
 
@@ -80,13 +79,19 @@ namespace gestionbiblioteca
         {
             string codigo = lblIdUsuario.Text;
             string nombre = txtNombreUsuario.Text;
+            string apellidos = txtApellidosUsuario.Text;
+            string fNacimiento = txtfNacimientoUsuario.Text;
+            string username = txtUsernameUsuario.Text;
+            string password = txtPasswordUsuario.Text;
+            string borrado = txtBorradoUsuario.Text;
+
             string cadenaConexion = ConfigurationManager.ConnectionStrings["GESTLIBRERIAConnectionString"].ConnectionString;
             int cod;
 
-            string SQL = "INSERT INTO usuarios(nombre) VALUES(" + nombre + ")";
+            string SQL = "INSERT INTO usuarios(nombre, apellidos, fNacimiento, username, password, borrado) VALUES(" + nombre + ", " + apellidos + ", " + fNacimiento + ", " + username + ", " + password + ", " + 0 + ")";
             if (Int32.TryParse(codigo, out cod) && cod > -1)
             {
-                SQL = "UPDATE usuarios SET nombre = '" + nombre + "' WHERE codUsuario =" + codigo;
+                SQL = "UPDATE usuario SET nombre = UPPER(" + nombre + "), apellidos = UPPER(" + apellidos + "), fNacimiento = " + fNacimiento + ", username = UPPER(" + username + "), password = " + password + ", borrado = " + borrado + " WHERE codUsuario =" + codigo;
             }
 
             SqlConnection conn = null;

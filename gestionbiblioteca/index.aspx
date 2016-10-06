@@ -26,20 +26,30 @@
                 </Items>
             </asp:Menu>
 
-            <asp:Button ID="btncrearUsuario" runat="server" Text="Crear Usuario"  OnClick="btncrearUsuario_Click"/>
+            <asp:UpdatePanel ID="upCrudGrid" runat="server">
+                <ContentTemplate>
+                    <asp:Button ID="btncrearUsuario" runat="server" Text="Crear Usuario"  OnClick="btncrearUsuario_Click"/>
         
-            <asp:GridView DataKeyNames="codUsuario" OnRowCommand="grdv_Usuarios_RowCommand" ID="grdv_Usuarios" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False">
-                <Columns>
-                    <asp:ButtonField CommandName="editUsuario" Text="Editar" ControlStyle-CssClass="btn btn-info">
-                        <ControlStyle CssClass="btn btn-info" />
-                     </asp:ButtonField>
-                    <asp:ButtonField CommandName="deleteUsuario" Text="Borrar" ControlStyle-CssClass="btn btn-danger">
-                        <ControlStyle CssClass="btn btn-danger" />
-                     </asp:ButtonField>
-                    <asp:BoundField DataField="codUsuario" Visible="False" />
-                    <asp:BoundField DataField="nombre" HeaderText="Nombre Usuario" Visible="true" />
-                </Columns>
-            </asp:GridView>
+                    <asp:GridView DataKeyNames="codUsuario" OnRowCommand="grdv_Usuarios_RowCommand" ID="grdv_Usuarios" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False">
+                        <Columns>
+                            <asp:ButtonField CommandName="editUsuario" Text="Editar" ControlStyle-CssClass="btn btn-info">
+                                <ControlStyle CssClass="btn btn-info" />
+                             </asp:ButtonField>
+                            <asp:ButtonField CommandName="deleteUsuario" Text="Borrar" ControlStyle-CssClass="btn btn-danger">
+                                <ControlStyle CssClass="btn btn-danger" />
+                             </asp:ButtonField>
+
+                            <asp:BoundField DataField="codUsuario" Visible="False" />
+                            <asp:BoundField DataField="nombre" HeaderText="Nombre Usuario" Visible="true" />
+                            <asp:BoundField DataField="apellidos" HeaderText="Apellidos Usuario" Visible="true" />
+                            <asp:BoundField DataField="fNacimiento" HeaderText="Fecha Nacimiento Usuario" Visible="true" />
+                            <asp:BoundField DataField="username" HeaderText="Username" Visible="true" />
+                            <asp:BoundField DataField="password" HeaderText="Password" Visible="true" />
+                            <asp:BoundField DataField="borrado" HeaderText="Borrado" Visible="true" />
+                        </Columns>
+                    </asp:GridView>
+                </ContentTemplate>
+            </asp:UpdatePanel>
          
 
             <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
@@ -51,8 +61,37 @@
                         </div>
 
                         <div class="modal-body">
-                            <asp:Label runat="server" ID="lblIdUsuario" Visible="false" Text=""></asp:Label>
-                            <asp:TextBox ID="txtNombreUsuario" runat="server" Text=""></asp:TextBox>
+                            <asp:Label ID="lblIdUsuario" runat="server" Visible="false" Text=""></asp:Label>
+
+                            <div class="form-group">
+                                <asp:Label ID="lblNombreUsuario" runat="server" Text="Nombre Usuario"></asp:Label>
+                                <asp:TextBox ID="txtNombreUsuario" runat="server" Text=""></asp:TextBox>
+                            </div>
+
+                            <div class="form-group">
+                                <asp:Label ID="lblApellidosUsuario" runat="server" Text="Apellidos Usuario"></asp:Label>
+                                <asp:TextBox ID="txtApellidosUsuario" runat="server" Text=""></asp:TextBox>
+                            </div>
+
+                            <div class="form-group">
+                                <asp:Label ID="lblfNacimientoUsuario" runat="server" Text="Fecha Nacimiento Usuario"></asp:Label>
+                                <asp:TextBox ID="txtfNacimientoUsuario" runat="server" Text=""></asp:TextBox>
+                            </div>
+
+                            <div class="form-group">
+                                <asp:Label ID="lblUsernameUsuario" runat="server" Text="Username"></asp:Label>
+                                <asp:TextBox ID="txtUsernameUsuario" runat="server" Text=""></asp:TextBox>
+                            </div>
+
+                            <div class="form-group">
+                                <asp:Label ID="lblPasswordusuario" runat="server" Text="Password"></asp:Label>
+                                <asp:TextBox ID="txtPasswordUsuario" runat="server" Text=""></asp:TextBox>
+                            </div>
+
+                            <div class="form-group">
+                                <asp:Label ID="lblBorradoUsuario" runat="server" Text="Borrado"></asp:Label>
+                                <asp:TextBox ID="txtBorradoUsuario" runat="server" Text=""></asp:TextBox>
+                            </div>
                         </div>
 
                         <div class="modal-footer">
