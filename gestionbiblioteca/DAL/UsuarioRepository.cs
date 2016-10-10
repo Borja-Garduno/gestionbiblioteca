@@ -10,6 +10,8 @@ namespace gestionbiblioteca.DAL
     interface UsuarioRepository
     {
         IList<Usuario> getAll();
+        IList<Usuario> getAllNoBorrados();
+        IList<Usuario> getAllBorradso();
         Usuario getById(Guid codUsuario);
         Usuario update(Usuario usuario);
         void delete(Usuario usuario);

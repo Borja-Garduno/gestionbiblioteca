@@ -20,24 +20,29 @@ namespace gestionbiblioteca
 
         private void cargaDatos()
         {
+            SqlConnection conn = null;
             try
             {
                 string cadenaConexion = ConfigurationManager.ConnectionStrings["GESTLIBRERIAConnectionString"].ConnectionString;
-                string SQL = "SELECT codUsuario, nombre, apellidos, fNacimiento, username, password, borrado FROM dbo.[usuario]";
-                SqlConnection conn = new SqlConnection(cadenaConexion);
+                string SQL = "getAllUsuarios";
+                conn = new SqlConnection(cadenaConexion);
                 conn.Open();
                 DataSet ds = new DataSet();
                 SqlDataAdapter dAdapter = new SqlDataAdapter(SQL, conn);
+                dAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
                 dAdapter.Fill(ds);
                 dt = ds.Tables[0];
 
                 grdv_Usuarios.DataSource = dt;
                 grdv_Usuarios.DataBind();
-                conn.Close();
             }
             catch (SqlException ex)
             {
                 Console.Error.Write("Excepcion SELECT: " + ex.Message);
+            }
+            finally
+            {
+                conn.Close();
             }
         }
 
@@ -46,17 +51,58 @@ namespace gestionbiblioteca
             string comand = e.CommandName;
             int index = Convert.ToInt32(e.CommandArgument);
             string codigo = grdv_Usuarios.DataKeys[index].Value.ToString();
+            int id = Int32.Parse(codigo);
 
             switch (comand)
             {
                 case "editUsuario":
                     {
                         lblIdUsuario.Text = codigo;
+                        SqlConnection conn = null;
+                        SqlDataReader reader = null;
+                        try
+                        {
+                            string SQL = "getByIdUsuario";
+                            string cadenaConexion = ConfigurationManager.ConnectionStrings["GESTLIBRERIAConnectionString"].ConnectionString;
+                            conn = new SqlConnection(cadenaConexion);
+                            SqlCommand cmd = new SqlCommand(SQL, conn);
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@codUsuario", id);
+                            conn.Open();
+                            reader = cmd.ExecuteReader();
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    txtNombreUsuario.Text = reader["nombre"].ToString();
+                                    txtApellidosUsuario.Text = reader["apellidos"].ToString();
+                                    txtfNacimientoUsuario.Text = reader["fNacimiento"].ToString();
+                                    txtUsernameUsuario.Text = reader["username"].ToString();
+                                    txtPasswordUsuario.Text = reader["password"].ToString();
+                                    //txtBorradoUsuario.Text = reader["borrado"].ToString();
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("no se han encontrado registro");
+                            }
+                        }
+                        catch (SqlException ex)
+                        {
+                            Console.Error.Write(ex.Message);
+                        }
+                        finally
+                        {
+                            reader.Close();
+                            conn.Close();
+                        }
+
                         System.Text.StringBuilder sb = new System.Text.StringBuilder();
                         sb.Append(@"<script>");
-                        sb.Append("$('#editModal').modal('show')");
+                        sb.Append("$('#crearEditarModal').text('Editar Usuario');");
+                        sb.Append("$('#editModal').modal('show');");
                         sb.Append(@"</script>");
-                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "ConfirmarEdicion", sb.ToString(), false);
+                        ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "MostrarEditar", sb.ToString(), false);
                     }
                     break;
 
